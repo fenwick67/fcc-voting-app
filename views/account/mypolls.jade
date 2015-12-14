@@ -1,0 +1,10 @@
+extends ../layout
+
+block content
+  .page-header
+    h3 My Polls
+  a(href='/newpoll') New Poll
+  .polls
+    each poll in polls
+      .col-sm-12 #{poll}
+        a(href='/poll/#{poll._id}') permalink

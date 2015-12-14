@@ -1,10 +1,12 @@
 var bcrypt = require('bcrypt-nodejs');
 var crypto = require('crypto');
 var mongoose = require('mongoose');
+var Poll = require('./Poll.js');
 
 var userSchema = new mongoose.Schema({
   email: { type: String, unique: true, lowercase: true },
   password: String,
+  polls:[{type: mongoose.Schema.ObjectId, ref: 'Poll'}],
 
   facebook: String,
   twitter: String,

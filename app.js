@@ -28,6 +28,7 @@ var sass = require('node-sass-middleware');
 var homeController = require('./controllers/home');
 var userController = require('./controllers/user');
 var apiController = require('./controllers/api');
+var pollController = require('./controllers/poll')
 var contactController = require('./controllers/contact');
 
 /**
@@ -117,6 +118,10 @@ app.post('/account/profile', passportConf.isAuthenticated, userController.postUp
 app.post('/account/password', passportConf.isAuthenticated, userController.postUpdatePassword);
 app.post('/account/delete', passportConf.isAuthenticated, userController.postDeleteAccount);
 app.get('/account/unlink/:provider', passportConf.isAuthenticated, userController.getOauthUnlink);
+
+app.get('/mypolls', passportConf.isAuthenticated, userController.getPolls);
+app.get('/newpoll',passportConf.isAuthenticated,userController.newPoll)
+app.get('/poll/:id',pollController.getPoll);
 
 /**
  * API examples routes.

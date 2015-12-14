@@ -4,7 +4,55 @@ var crypto = require('crypto');
 var nodemailer = require('nodemailer');
 var passport = require('passport');
 var User = require('../models/User');
+var Poll = require('../models/Poll');
 var secrets = require('../config/secrets');
+
+
+/**
+ * GET /mypolls
+ * 
+ */
+exports.getPolls = function(req,res,next){
+  User.findById(req.user.id, function(err, user) {
+    if (err) {
+      return next(err);
+    }
+    var userPolls = user.polls;
+    
+    Poll.find({_id:{$in:userPolls}},function(er,polls){
+      if(er) return next(err);
+      res.render('account/mypolls',{
+        polls:polls,
+        title:'My Polls'
+      });
+    })
+    
+    
+  
+  });
+  
+}
+
+exports.newPoll = function(req,res,next){
+    User.findById(req.user.id, function(err, user) {
+    if (err) {
+      return next(err);
+    }
+    
+    var poll = new Poll;
+    user.polls.push(poll);
+    user.save(function(){
+      poll.save(function(){
+        res.redirect('/mypolls');          
+      });
+    });      
+
+  
+  });
+}
+
+
+
 
 /**
  * GET /login
