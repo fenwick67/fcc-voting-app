@@ -7,4 +7,5 @@ block content
   .polls
     each poll in polls
       .col-sm-12 #{poll}
-        a(href='/poll/#{poll._id}') permalink
+        a(href='/poll/#{poll._id}') Permalink
+        a(href='/mypolls/#{poll.id}/edit') Edit

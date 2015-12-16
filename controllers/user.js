@@ -51,6 +51,26 @@ exports.newPoll = function(req,res,next){
   });
 }
 
+/** 
+ * GET mypolls/:id/edit
+ * 
+ * edit a poll
+ */
+ 
+ exports.editPoll = function(req,res,next){
+  Poll.findById(req.params.id, function(err, poll) {
+    if (err) {
+      //console.log('cannot get poll',req.params.id)
+      return next(err);
+    }
+    //console.log('rendering poll',poll)
+    
+    res.render('polls/edit',{
+      poll:poll
+    });
+    
+  });
+}
 
 
 
@@ -121,6 +141,10 @@ exports.getSignup = function(req, res) {
     title: 'Create Account'
   });
 };
+
+
+   
+   
 
 /**
  * POST /signup

@@ -15,10 +15,10 @@ var secrets = require('../config/secrets');
 exports.getPoll = function(req,res,next){
   Poll.findById(req.params.id, function(err, poll) {
     if (err) {
-      console.log('cannot get poll',req.params.id)
+      //console.log('cannot get poll',req.params.id)
       return next(err);
     }
-    console.log('rendering poll',poll)
+    //console.log('rendering poll',poll)
     
     res.render('polls/poll',{
       poll:poll

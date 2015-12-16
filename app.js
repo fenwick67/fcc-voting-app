@@ -119,8 +119,12 @@ app.post('/account/password', passportConf.isAuthenticated, userController.postU
 app.post('/account/delete', passportConf.isAuthenticated, userController.postDeleteAccount);
 app.get('/account/unlink/:provider', passportConf.isAuthenticated, userController.getOauthUnlink);
 
+// edit/view my polls
 app.get('/mypolls', passportConf.isAuthenticated, userController.getPolls);
+app.get('/mypolls/:id/edit',passportConf.isAuthenticated,userController.editPoll)
 app.get('/newpoll',passportConf.isAuthenticated,userController.newPoll)
+
+//public poll link
 app.get('/poll/:id',pollController.getPoll);
 
 /**
