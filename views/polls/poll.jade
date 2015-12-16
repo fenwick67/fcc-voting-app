@@ -2,6 +2,16 @@ extends ../layout
 
 block content
   .page-header
-    h3 Look at this Poll!
-  .poll
-    #{poll}
+    h3 #{poll.name}
+    form(method="POST")
+    
+      input(type='hidden', name='_csrf', value=_csrf)
+      each option in poll.options
+          .radio
+            label(for='option-#{option}') 
+              input(type="radio" name="pollchoice" value='#{option}' id='option-#{option}')
+            |#{option}
+        button.btn.btn-success#submit-response(type="submit")
+          i.fa.fa-arrow-right
+          |Submit
+          

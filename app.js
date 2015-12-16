@@ -122,6 +122,7 @@ app.get('/account/unlink/:provider', passportConf.isAuthenticated, userControlle
 // edit/view my polls
 app.get('/mypolls', passportConf.isAuthenticated, userController.getPolls);
 app.get('/mypolls/:id/edit',passportConf.isAuthenticated,userController.editPoll)
+app.post('/mypolls/:id/edit',passportConf.isAuthenticated,userController.postPoll)
 app.get('/newpoll',passportConf.isAuthenticated,userController.newPoll)
 
 //public poll link

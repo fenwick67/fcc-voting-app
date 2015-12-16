@@ -4,19 +4,22 @@ block content
   .page-header
     h3 Edit this Poll!
   .poll
-    #{poll}
     form.form-horizontal(id='edit-poll-form', method='POST')
       input(type='hidden', name='_csrf', value=_csrf)
       .form-group
         label.col-sm-3.control-label(for='name') Poll Name
         .col-sm-7
           input.form-control(type="text" name="pollname" id="pollname" autofocus, value='#{poll.name}')
-      #polloptions
-        each option in poll.options
-          .form-group
-            label.col-sm-3.control-label(for='polloption') Password
-            .col-sm-7
-              input.form-control(placeholder='Password', value='#{option}', name="polloption")
+      .form-group
+        label.col-sm-3.control-label(for="polloption") Poll Options
+        .col-sm-7#polloptions
+          each option in poll.options
+            .input-group
+              input.form-control(placeholder='New Option', value='#{option}', name="polloption")
+              .input-group-btn
+                .btn.btn-warning.remove-button
+                  i.fa.fa-minus
+                  | Remove
       .form-group
         .col-sm-offset-3.col-sm-7
           .btn.btn-success#addoption
@@ -24,8 +27,19 @@ block content
             | Add an Option
       .form-group
         .col-sm-offset-3.col-sm-7
-          button.btn.btn-success(type='submit')
+          button.btn.btn-primary(type='submit')
             i.fa.fa-save
             | Save
+          button.btn.btn-danger(type='submit' name="delete")
+            i.fa.fa-times
+            | Delete Poll
+            
+  script(type="text/template")#option-template
+    .input-group
+      input.form-control(placeholder='New Option', name="polloption")
+      .input-group-btn
+        .btn.btn-warn.remove-button
+          i.fa.fa-minus
+          | Remove
   script(src="/js/lib/jquery.min.js")        
   script(src="/js/editpoll.js")

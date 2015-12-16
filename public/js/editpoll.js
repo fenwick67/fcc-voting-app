@@ -1,13 +1,7 @@
 $(function(){
    
    
-    var newOption = $('<div class="form-group">'+
-  '<label for="polloption" class="col-sm-3 control-label">'+
-    '<div class="col-sm-7">'+
-      '<input placeholder="Password" class="form-control"/>'+
-    '</div>'+
-  '</label>'+
-'</div>').clone();
+    var newOption = $($('#option-template').html());
     
     
     $('#addoption').on('click',function(){
@@ -17,7 +11,10 @@ $(function(){
     });
     
 
-
+    $('body').on('click','.remove-button',function(){
+      console.log(this);
+      $(this).parent().parent().remove();
+    })
 
 
     

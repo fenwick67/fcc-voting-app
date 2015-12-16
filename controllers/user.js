@@ -13,14 +13,11 @@ var secrets = require('../config/secrets');
  * 
  */
 exports.getPolls = function(req,res,next){
-  User.findById(req.user.id, function(err, user) {
-    if (err) {
-      return next(err);
-    }
-    var userPolls = user.polls;
+
+    var userPolls = req.user.polls;
     
     Poll.find({_id:{$in:userPolls}},function(er,polls){
-      if(er) return next(err);
+      if(er) return next(er);
       res.render('account/mypolls',{
         polls:polls,
         title:'My Polls'
@@ -28,8 +25,6 @@ exports.getPolls = function(req,res,next){
     })
     
     
-  
-  });
   
 }
 
@@ -57,6 +52,7 @@ exports.newPoll = function(req,res,next){
  * edit a poll
  */
  
+ //TODO make sure the user has permissions to edit it
  exports.editPoll = function(req,res,next){
   Poll.findById(req.params.id, function(err, poll) {
     if (err) {
@@ -70,6 +66,62 @@ exports.newPoll = function(req,res,next){
     });
     
   });
+};
+
+/**
+ * post /mypolls/:id/edit
+ * 
+ * updates a poll object in the db
+ * 
+ */
+
+//todo make sure user is allowed to edit it 
+exports.postPoll = function(req,res,next){
+  Poll.findById(req.params.id, function(err, poll) {
+    if (err) {
+      //console.log('cannot get poll',req.params.id)
+      return next(err);
+    }
+
+    if (req.body){
+       
+      if(typeof req.body.delete !== 'undefined'){//delete button
+        poll.remove(function(er){
+          if(er) return next(er);
+          res.redirect('/mypolls');
+        });
+      }else{
+         
+        if (req.body.pollname && typeof req.body.pollname === 'string'){
+         poll.name = req.body.pollname;
+        }
+        if(req.body.polloption){
+          if (typeof req.body.polloption === 'string'){
+            //passed just one option
+            poll.options = [req.body.polloption];
+          }else if (Array.isArray(req.body.polloption) ){
+             poll.options = req.body.polloption;
+          }
+        }
+         
+         
+        poll.save(function(er){
+          if(er)return next(er);
+          else{
+            res.redirect('/mypolls');
+          }
+        });
+         
+      }
+       
+      
+       
+    }else{
+      return next('no request body found');
+    }
+     
+  });
+  
 }
 
 

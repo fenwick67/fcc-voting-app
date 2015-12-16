@@ -3,9 +3,23 @@ extends ../layout
 block content
   .page-header
     h3 My Polls
-  a(href='/newpoll') New Poll
-  .polls
-    each poll in polls
-      .col-sm-12 #{poll}
-        a(href='/poll/#{poll._id}') Permalink
-        a(href='/mypolls/#{poll.id}/edit') Edit
+  
+    if (polls.length < 1)
+      h2 No polls yet.
+        h3 
+          i.fa.fa-arrow-down
+          |Click below to create one
+    else
+      each poll in polls
+        .input-group
+          .form-control #{poll.name}
+          .input-group-btn
+            a.btn.btn-info(href='/poll/#{poll._id}') 
+              i.fa.fa-link
+              |Permalink
+            a.btn.btn-primary(href='/mypolls/#{poll.id}/edit')
+              i.fa.fa-pencil
+              |Edit
+  a.btn.btn-success(href='/newpoll')
+    i.fa.fa-plus
+    |New Poll

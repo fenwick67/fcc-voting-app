@@ -7,9 +7,8 @@ var User = require('../models/User');
 var Poll = require('../models/Poll');
 var secrets = require('../config/secrets');
 
-
 /**
- * GET /mypolls
+ * GET /poll/:id
  * 
  */
 exports.getPoll = function(req,res,next){
@@ -23,9 +22,8 @@ exports.getPoll = function(req,res,next){
     res.render('polls/poll',{
       poll:poll
     });
-
   
   });
   
-}
+};
 
