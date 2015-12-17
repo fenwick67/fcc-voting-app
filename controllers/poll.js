@@ -14,14 +14,19 @@ var secrets = require('../config/secrets');
 exports.getPoll = function(req,res,next){
   Poll.findById(req.params.id, function(err, poll) {
     if (err) {
-      //console.log('cannot get poll',req.params.id)
       return next(err);
     }
-    //console.log('rendering poll',poll)
+    
+    // look up if user has voted on this poll
+    var hasVoted = false;
+    if (req.session && req.session.hasVoted && req.session.hasVoted[poll._id]){
+      hasVoted = true;
+    }
     
     res.render('polls/poll',{
       poll:poll,
-      title:poll.name
+      title:poll.name,
+      hasVoted:hasVoted
     });
   
   });
@@ -30,7 +35,15 @@ exports.getPoll = function(req,res,next){
 
 exports.submitResponse = function(req,res,next){
   
-  Poll.findById(req.params.id,function(err,poll){
+  var pollId = req.params.id;
+  
+  if (req.session && req.session.hasVoted && req.session.hasVoted[pollId]){
+    req.flash('errors',{msg:'You have already voted!'});
+    return res.redirect(req.url);
+  }
+  
+  
+  Poll.findById(pollId,function(err,poll){
     if(err) return next(err);
     if (poll.active === false){
       return next('Poll is no longer active.  Sorry!');
@@ -54,19 +67,24 @@ exports.submitResponse = function(req,res,next){
         
         poll.results[choiceIndex] = poll.results[choiceIndex] + 1;
         poll.markModified('results');
-        //console.log(poll);
         poll.save(function(er){
-          console.log(poll);
           if(er)return next(er);
+          //record that session has voted
+          if (req.session){
+            req.session.hasVoted = req.session.hasVoted || {};
+            req.session.hasVoted[poll._id] = true;
+          }
+          
           req.flash('success',{msg:'Your vote has been recorded'})
-          res.redirect('/poll/'+req.params.id);
+          res.redirect(req.url);
         });
       }else{
         return next('poll choice not valid');
       }
       
     }else{//poll choice not sumbitted
-      return next('poll choice not submitted');
+      req.flash('errors',{msg:'Please select an option'});
+      return res.redirect(req.url);
     }
     
   });
@@ -76,7 +94,6 @@ exports.submitResponse = function(req,res,next){
 exports.getPollJson = function(req,res,next){
   Poll.findById(req.params.id,function(err,poll){
     if(err) return next(err);
-    console.log('from json: ',poll);
     res.json(poll);
   });
 };

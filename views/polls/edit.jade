@@ -40,6 +40,10 @@ block content
       .input-group-btn
         .btn.btn-warning.remove-button
           i.fa.fa-minus
-          | Remove
-  script(src="/js/lib/jquery.min.js")        
+          | Remove   
+  h4 Poll Results
+  canvas#pollcanvas.center-block(data-pollid='#{poll._id}', width='500px', height='500px')
+  script(src="/js/lib/jquery.min.js")   
+  script(src="/js/lib/chart.min.js")
+  script(src="/js/showpoll.js")
   script(src="/js/editpoll.js")

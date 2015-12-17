@@ -129,7 +129,7 @@ exports.postPoll = function(req,res,next){
           if(er)return next(er);
 
           console.log(poll);
-          res.redirect('/mypolls');
+          res.redirect(req.url);
           
         });
          
