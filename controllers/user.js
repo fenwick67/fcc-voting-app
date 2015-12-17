@@ -23,8 +23,6 @@ exports.getPolls = function(req,res,next){
         title:'My Polls'
       });
     })
-    
-    
   
 }
 
@@ -52,8 +50,12 @@ exports.newPoll = function(req,res,next){
  * edit a poll
  */
  
- //TODO make sure the user has permissions to edit it
  exports.editPoll = function(req,res,next){
+  if (req.user.polls.indexOf(req.params.id) < 0){
+    res.status(400);
+    res.send('user does not have access to this poll');
+  }
+  
   Poll.findById(req.params.id, function(err, poll) {
     if (err) {
       //console.log('cannot get poll',req.params.id)
@@ -62,7 +64,8 @@ exports.newPoll = function(req,res,next){
     //console.log('rendering poll',poll)
     
     res.render('polls/edit',{
-      poll:poll
+      poll:poll,
+      title:'Edit Poll'
     });
     
   });
@@ -75,8 +78,12 @@ exports.newPoll = function(req,res,next){
  * 
  */
 
-//todo make sure user is allowed to edit it 
 exports.postPoll = function(req,res,next){
+  if (req.user.polls.indexOf(req.params.id) < 0){
+    res.status(400);
+    res.send('user does not have access to this poll');
+  }
+  
   Poll.findById(req.params.id, function(err, poll) {
     if (err) {
       //console.log('cannot get poll',req.params.id)
@@ -96,20 +103,34 @@ exports.postPoll = function(req,res,next){
          poll.name = req.body.pollname;
         }
         if(req.body.polloption){
+          
           if (typeof req.body.polloption === 'string'){
             //passed just one option
             poll.options = [req.body.polloption];
           }else if (Array.isArray(req.body.polloption) ){
-             poll.options = req.body.polloption;
+            //passed an array of options
+            poll.options = req.body.polloption;
           }
+          
+          //need to update poll.results to be the right size...
+          if (poll.results.length > poll.options.length){//trim it smaller
+            poll.results.splice(poll.options.length);
+            poll.markModified('results');
+          }else if (poll.results.length < poll.options.length){//make it bigger
+            for(var i = poll.results.length; i < poll.options.length; i ++){
+              poll.results.push(0);
+              poll.markModified('results');
+            }
+          }
+          
         }
-         
          
         poll.save(function(er){
           if(er)return next(er);
-          else{
-            res.redirect('/mypolls');
-          }
+
+          console.log(poll);
+          res.redirect('/mypolls');
+          
         });
          
       }

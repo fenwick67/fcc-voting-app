@@ -2,26 +2,23 @@ extends layout
 
 block content
   h1 Votr
-  p.lead The hot place to vote
+  p.lead The happenin' place to vote
   hr
   .row
-    .col-sm-6
-      h2 Heading
-      p Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-      p
-        a.btn.btn-default(href='#', role='button') View details »
-    .col-sm-6
-      h2 Heading
-      p Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-      p
-        a.btn.btn-default(href='#', role='button') View details »
-    .col-sm-6
-      h2 Heading
-      p Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-      p
-        a.btn.btn-default(href='#', role='button') View details »
-    .col-sm-6
-      h2 Heading
-      p Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-      p
-        a.btn.btn-default(href='#', role='button') View details »
+    if (!user)
+      .col-sm-6
+        h2 Start polling today
+        p Create polls that excite the mind, touch the soul and grip the heart
+        p
+          a.btn.btn-default(href='/login', role='button') Get Started »
+      .col-sm-6
+        h2 Cellular, modular, interactiv-odular
+        p Get your polls out there at the speed of data
+        p
+          a.btn.btn-default(href='/login', role='button') Learn Today »
+    else
+      .col-sm-6
+        h2 What are you waiting for?
+        p Create a poll in <30 seconds.  It's so fast, you won't have time to type "less than".
+        p
+          a.btn.btn-default(href='/mypolls', role='button') Do it now! »

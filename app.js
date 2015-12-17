@@ -127,6 +127,8 @@ app.get('/newpoll',passportConf.isAuthenticated,userController.newPoll)
 
 //public poll link
 app.get('/poll/:id',pollController.getPoll);
+app.post('/poll/:id',pollController.submitResponse);
+app.get('/poll/:id/results.json',pollController.getPollJson);
 
 /**
  * API examples routes.
